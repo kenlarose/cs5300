@@ -1,9 +1,6 @@
 import pytest
-import logging
 import os
 import glob
-import sys
-import types
 
 import task1
 import task2
@@ -11,9 +8,7 @@ import task3
 import task4
 import task5
 import task6
-
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+import task7
 
 # task 1
 def test_task1_hello_world(capsys):
@@ -157,7 +152,7 @@ def get_txt_files():
     txt_files = glob.glob(os.path.join(project_dir, "./*.txt"))
     return [os.path.basename(path) for path in txt_files]
 
-def test_word_count(word_count_filename):
+def test_task6_word_count(word_count_filename):
     word_count = task6.get_file_word_count(word_count_filename)
 
     # assert word count match on prepared test files
@@ -166,12 +161,32 @@ def test_word_count(word_count_filename):
     else:
         assert word_count > 0
 
-
 def pytest_generate_tests(metafunc):
-    """dynamically generates test cases based on param 'word_count_filename'"""
+    """
+    dynamically generates test cases based on param 'word_count_filename'
+
+    Code developed with assistance from Claude (version 3.5 Sonnet), 
+    an AI assistant created by Anthropic (consulted February 2025)
+    """
     if "word_count_filename" in metafunc.fixturenames:
         txt_files = get_txt_files()
         metafunc.parametrize("word_count_filename", txt_files)
 
 
 # task 7
+def test_task7_reshape_array():
+    """validate reshaping a one dimensional array to a
+       two dimensional array using numpy"""
+    array = task7.new_one_dimensional_array(9)
+    original_attributes = task7.get_array_attributes(array)
+
+    assert original_attributes["dimensions"] == 1
+    assert original_attributes["size"] == 9
+    assert original_attributes["shape"] == (9,)
+
+    reshaped = task7.reshape_to_two_dimensions(array)
+    reshaped_attributes = task7.get_array_attributes(reshaped)
+
+    assert reshaped_attributes["dimensions"] == 2
+    assert reshaped_attributes["size"] == 9
+    assert reshaped_attributes["shape"] == (3, 3)
